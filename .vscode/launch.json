@@ -1,0 +1,19 @@
+# .vscode/launch.json
+{
+    "version": "0.2.0",
+    "configurations": [
+    
+        {
+            "name": "Streamlit",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/.conda/envs/tallman_ai/Scripts/streamlit",
+            "args": [
+                "run",
+                "${workspaceFolder}/src/main.py"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        }
+    ]
+}

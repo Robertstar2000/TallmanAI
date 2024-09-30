@@ -1,0 +1,18 @@
+tallman_ai/
+├── env/
+├── .vscode/
+│   └── launch.json
+├── main.py
+├── auth.py
+├── qa_module.py
+├── user_management.py
+├── approved_user_list/
+│   └── approved_user_list.csv
+├── QA_data/
+│   └── qa_data.txt
+├── Prompts/
+│   └── prompts.py
+├── .env
+├── environment.yml
+├── app.log
+└── README.md

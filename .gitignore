@@ -1,0 +1,7 @@
+# Ignore Conda
+env/
+my_streamlit_env/
+
+#Ignore Python cache
+__pycache__/
+*.pyc
