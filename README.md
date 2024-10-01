@@ -1,3 +1,5 @@
+# TallmanAI
+Tallman AI project to service a Tallman unique knowledgebase with learning
 This project is a Streamlit-based AI application for Tallman Equipment Co., Inc.
 
 ### Setup Instructions
