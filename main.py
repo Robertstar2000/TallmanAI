@@ -6,6 +6,9 @@ from dotenv import load_dotenv
 import datetime
 import chromadb
 import pandas as pd
+import pysqlite3
+import sys
+sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
 from user_management import add_user, verify_pin, load_users, reset_password, save_users
 from qa_module import (
     # extract_keywords_spacy,  # Commented out as per the logic
