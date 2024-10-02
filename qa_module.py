@@ -4,6 +4,9 @@ import chromadb
 import os
 from typing import List
 import streamlit as st
+import pysqlite3
+import sys
+sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
 from groq import Groq
 import datetime
 from dotenv import load_dotenv
