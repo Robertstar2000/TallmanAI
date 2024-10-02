@@ -101,7 +101,7 @@ requests-oauthlib==2.0.0
 rich==13.8.1
 rpds-py==0.20.0
 rsa==4.9
-scikit-laarn==1.2.2
+scikit-learn==1.2.2
 setuptools==75.1.0
 shellingham==1.5.4
 six==1.16.0
