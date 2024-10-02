@@ -10,6 +10,7 @@ dependencies:
   - pandas=2.0.1  # Added version for pandas
   - spacy=3.5.2  # Added version for spaCy
   - nltk=3.8.1  # Added version for NLTK
+  - python-dotenv=1.0.1
   - scikit-learn=1.2.2  # Added version for scikit-learn
   - pip
   - pip:
