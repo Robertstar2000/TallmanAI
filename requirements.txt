@@ -1,5 +1,5 @@
 setuptools>=68.0.0
-pysqlite3-binary==0.5.3.post1
+pysqlite3-binary==0.5.3
 groq==0.11.0
 altair==5.4.1
 chromadb==0.5.11
