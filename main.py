@@ -1,21 +1,13 @@
 # main.py
 
-__import__('pysqlite3')
-import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
-
 import os
 import streamlit as st
 from dotenv import load_dotenv
 import datetime
 import chromadb
 import pandas as pd
-import pysqlite3
-import sys
-sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
 from user_management import add_user, verify_pin, load_users, reset_password, save_users
 from qa_module import (
-    # extract_keywords_spacy,  # Commented out as per the logic
     query_chroma,
     generate_ai_response,
     ensure_database,
@@ -23,7 +15,6 @@ from qa_module import (
     close_chroma_client,
     reload_database,
 )
-#from Prompts.prompts import prompt_dict
 
 # ============================
 # Load Environment Variables
@@ -90,30 +81,34 @@ def handle_login(username, pin):
             st.session_state.user_role = auth_result["role"]
             st.session_state.screen = "qa"
             st.success("Login successful!")
-            # Removed st.rerun()
         else:
             st.error(auth_result["message"])
+
+def handle_login_callback():
+    username = st.session_state.login_username
+    pin = st.session_state.login_pin
+    handle_login(username, pin)
 
 def display_login_screen():
     st.image("images/tallmanlogo.png", use_column_width=True)
     st.title("🔐 Login")
     st.write("---")
-    username = st.text_input("Username", key="login_username")
-    pin = st.text_input("PIN", type="password", key="login_pin")
+
+    if "login_username" not in st.session_state:
+        st.session_state.login_username = ""
+    if "login_pin" not in st.session_state:
+        st.session_state.login_pin = ""
+
+    st.text_input("Username", key="login_username")
+    st.text_input("PIN", type="password", key="login_pin")
 
     col1, col2, col3 = st.columns(3)
     with col1:
-        if st.button("LOG IN", key="login_button"):
-            handle_login(username, pin)
-            # Removed st.rerun()
+        st.button("LOG IN", key="login_button", on_click=handle_login_callback)
     with col2:
-        if st.button("New Account", key="new_account_button"):
-            st.session_state.screen = "new_account"
-            # Removed st.rerun()
+        st.button("New Account", key="new_account_button", on_click=set_screen, args=("new_account",))
     with col3:
-        if st.button("Reset Password", key="reset_password_button"):
-            st.session_state.screen = "reset_password"
-            # Removed st.rerun()
+        st.button("Reset Password", key="reset_password_button", on_click=set_screen, args=("reset_password",))
 
 def handle_new_account(username, pin, email):
     if not username or not pin or not email:
@@ -133,22 +128,33 @@ def handle_new_account(username, pin, email):
             add_user(user_data)
             st.success("Account created successfully! Awaiting admin approval.")
 
+def handle_new_account_callback():
+    username = st.session_state.new_account_username
+    pin = st.session_state.new_account_pin
+    email = st.session_state.new_account_email
+    handle_new_account(username, pin, email)
+
 def display_new_account_screen():
     st.image("images/tallmanlogo.png", use_column_width=True)
     st.title("🆕 Create New Account")
     st.write("---")
-    username = st.text_input("Username", key="new_account_username")
-    pin = st.text_input("PIN", type="password", key="new_account_pin")
-    email = st.text_input("Email", key="new_account_email")
+
+    if "new_account_username" not in st.session_state:
+        st.session_state.new_account_username = ""
+    if "new_account_pin" not in st.session_state:
+        st.session_state.new_account_pin = ""
+    if "new_account_email" not in st.session_state:
+        st.session_state.new_account_email = ""
+
+    st.text_input("Username", key="new_account_username")
+    st.text_input("PIN", type="password", key="new_account_pin")
+    st.text_input("Email", key="new_account_email")
 
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("Submit", key="submit_new_account_button"):
-            handle_new_account(username, pin, email)
+        st.button("Submit", key="submit_new_account_button", on_click=handle_new_account_callback)
     with col2:
-        if st.button("Back to Login", key="back_to_login_button"):
-            st.session_state.screen = "login"
-            # Removed st.rerun()
+        st.button("Back to Login", key="back_to_login_button", on_click=set_screen, args=("login",))
 
 def handle_reset_password(username, email, new_pin):
     if not username or not email or not new_pin:
@@ -161,26 +167,43 @@ def handle_reset_password(username, email, new_pin):
         else:
             st.error("Invalid username or email.")
 
+def handle_reset_password_callback():
+    username = st.session_state.reset_password_username
+    email = st.session_state.reset_password_email
+    new_pin = st.session_state.reset_password_new_pin
+    handle_reset_password(username, email, new_pin)
+
 def display_reset_password_screen():
     st.image("images/tallmanlogo.png", use_column_width=True)
     st.title("🔒 Reset Password")
     st.write("---")
-    username = st.text_input("Username", key="reset_password_username")
-    email = st.text_input("Email", key="reset_password_email")
-    new_pin = st.text_input("New PIN", type="password", key="reset_password_new_pin")
+
+    if "reset_password_username" not in st.session_state:
+        st.session_state.reset_password_username = ""
+    if "reset_password_email" not in st.session_state:
+        st.session_state.reset_password_email = ""
+    if "reset_password_new_pin" not in st.session_state:
+        st.session_state.reset_password_new_pin = ""
+
+    st.text_input("Username", key="reset_password_username")
+    st.text_input("Email", key="reset_password_email")
+    st.text_input("New PIN", type="password", key="reset_password_new_pin")
 
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("Reset Password", key="reset_password_button"):
-            handle_reset_password(username, email, new_pin)
+        st.button("Reset Password", key="reset_password_button", on_click=handle_reset_password_callback)
     with col2:
-        if st.button("Back to Login", key="reset_back_to_login_button"):
-            st.session_state.screen = "login"
-            # Removed st.rerun()
+        st.button("Back to Login", key="reset_back_to_login_button", on_click=set_screen, args=("login",))
 
 # ============================
 # QA Screen
 # ============================
+def handle_answer_callback(collection):
+    user_question = st.session_state.qa_user_question_input
+    query_type = st.session_state.qa_query_type
+    handle_answer(user_question, query_type, collection)
+    st.session_state.user_question = user_question
+
 def display_qa_screen(collection, handle_answer):
     st.image("images/tallmanlogo.png", use_column_width=True)
     st.title("🤖 QA Assistant")
@@ -194,23 +217,15 @@ def display_qa_screen(collection, handle_answer):
         key="qa_query_type",
     )
 
-    # Maintain user_question in session state
     if "user_question" not in st.session_state:
         st.session_state.user_question = ""
 
-    # Input text area for the user question
-    user_question = st.text_area(
+    st.text_area(
         "Your Question", value=st.session_state.user_question, key="qa_user_question_input"
     )
 
-    # Handle the answer if the button is pressed
-    if st.button("Answer", key="qa_answer_button"):
-        handle_answer(user_question, query_type, collection)
-        # Update the user_question in session state
-        st.session_state.user_question = user_question
-        # Removed st.rerun()  # Rerun to display the updated answer
+    st.button("Answer", key="qa_answer_button", on_click=handle_answer_callback, args=(collection,))
 
-    # Display the last response if available
     if "last_response" in st.session_state:
         last_response = st.session_state.last_response
         if last_response.startswith("Error generating AI response:"):
@@ -223,26 +238,26 @@ def display_qa_screen(collection, handle_answer):
                 key="qa_last_response",
             )
 
-    # Navigation buttons
     col1, col2, col3 = st.columns(3)
     with col1:
-        if st.button("Correct Answer", key="qa_correct_answer_button"):
-            st.session_state.screen = "correct"
-            # Removed st.rerun()
+        st.button("Correct Answer", key="qa_correct_answer_button", on_click=set_screen, args=("correct",))
     with col2:
-        if st.button("LOG OUT", key="qa_logout_button"):
-            st.session_state.user = None
-            st.session_state.screen = "login"
-            # Removed st.rerun()
+        st.button("LOG OUT", key="qa_logout_button", on_click=logout)
     with col3:
         if st.session_state.get("user_role") == "admin":
-            if st.button("User Management", key="qa_user_management_button"):
-                st.session_state.screen = "user_management"
-                # Removed st.rerun()
+            st.button("User Management", key="qa_user_management_button", on_click=set_screen, args=("user_management",))
+
+def logout():
+    st.session_state.user = None
+    st.session_state.screen = "login"
 
 # ============================
 # Correct Answer Screen
 # ============================
+def handle_correction_callback(collection):
+    correction = st.session_state.correct_correction_input
+    handle_correction(correction, collection)
+
 def handle_correction(correction, collection):
     if not correction:
         st.error("Please provide a correction before submitting.")
@@ -280,9 +295,7 @@ def handle_correction(correction, collection):
         except Exception as e:
             st.error(f"Failed to save correction to the database: {e}")
 
-        # Return to QA screen
         st.session_state.screen = "qa"
-        # Removed st.rerun()
 
 def display_correct_screen(collection):
     st.image("images/tallmanlogo.png", use_column_width=True)
@@ -297,20 +310,28 @@ def display_correct_screen(collection):
         key="correct_answer_last",
     )
 
-    correction = st.text_area("Your Correction", key="correct_correction_input")
+    st.text_area("Your Correction", key="correct_correction_input")
 
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("Submit Correction", key="submit_correction_button"):
-            handle_correction(correction, collection)
+        st.button("Submit Correction", key="submit_correction_button", on_click=handle_correction_callback, args=(collection,))
     with col2:
-        if st.button("Done", key="done_button"):
-            st.session_state.screen = "qa"
-            # Removed st.rerun()
+        st.button("Done", key="done_button", on_click=set_screen, args=("qa",))
 
 # ============================
 # User Management Screen
 # ============================
+def save_user_changes(edited_df, users):
+    for idx, row in edited_df.iterrows():
+        username = row["username"]
+        if username in users:
+            users[username]["role"] = row["role"]
+    try:
+        save_users(list(users.values()))
+        st.success("User roles updated successfully.")
+    except Exception as e:
+        st.error(f"Failed to save changes: {e}")
+
 def display_user_management_screen():
     st.image("images/tallmanlogo.png", use_column_width=True)
     st.title("👥 User Management")
@@ -351,36 +372,25 @@ def display_user_management_screen():
 
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("Save Changes", key="save_user_changes_button"):
-            for idx, row in edited_df.iterrows():
-                username = row["username"]
-                if username in users:
-                    users[username]["role"] = row["role"]
-            try:
-                save_users(list(users.values()))
-                st.success("User roles updated successfully.")
-            except Exception as e:
-                st.error(f"Failed to save changes: {e}")
+        st.button("Save Changes", key="save_user_changes_button", on_click=save_user_changes, args=(edited_df, users))
     with col2:
-        if st.button("Back to QA", key="back_to_qa_button"):
-            st.session_state.screen = "qa"
-            # Removed st.rerun()
+        st.button("Back to QA", key="back_to_qa_button", on_click=set_screen, args=("qa",))
 
-    # Add the "ReLoad DB" button
     st.write("---")
-    if st.button("ReLoad DB", key="reload_db_button"):
-        with st.spinner("Reloading the database, please wait..."):
-            try:
-                if "chroma_client" in st.session_state:
-                    close_chroma_client(st.session_state.chroma_client)
-                    del st.session_state.chroma_client
-                st.cache_resource.clear()
-                collection, client = reload_database("tallman_knowledge", qa_data_path)
-                st.session_state.chroma_client = client
-                st.success("Database reloaded successfully!")
-                # Removed st.rerun()
-            except Exception as e:
-                st.error(f"Failed to reload database: {e}")
+    st.button("ReLoad DB", key="reload_db_button", on_click=reload_db)
+
+def reload_db():
+    with st.spinner("Reloading the database, please wait..."):
+        try:
+            if "chroma_client" in st.session_state:
+                close_chroma_client(st.session_state.chroma_client)
+                del st.session_state.chroma_client
+            st.cache_resource.clear()
+            collection, client = reload_database("tallman_knowledge", qa_data_path)
+            st.session_state.chroma_client = client
+            st.success("Database reloaded successfully!")
+        except Exception as e:
+            st.error(f"Failed to reload database: {e}")
 
 # ============================
 # Caching the Database Collection
@@ -401,20 +411,16 @@ def append_qa_entry(date: str, user_question: str, answer: str, qa_data_path: st
     entry = f"{date}\nUSER QUESTION: {user_question}\nANSWER: {answer}\n\n"
     
     try:
-        # Ensure the directory exists
         os.makedirs(os.path.dirname(qa_data_path), exist_ok=True)
 
-        # Read the existing content of the file
         if os.path.exists(qa_data_path):
             with open(qa_data_path, 'r', encoding='utf-8') as f:
                 existing_content = f.read()
         else:
             existing_content = ""
 
-        # Prepend the new entry to the existing content
         new_content = entry + existing_content
 
-        # Write the new content back to the file
         with open(qa_data_path, 'w', encoding='utf-8') as f:
             f.write(new_content)
 
@@ -460,6 +466,9 @@ def close_chroma_client(chroma_client):
     except Exception as e:
         print(f"Failed to close ChromaDB client: {e}")
         raise e
+
+def set_screen(screen_name):
+    st.session_state.screen = screen_name
 
 # ============================
 # Main Function to Control Navigation
