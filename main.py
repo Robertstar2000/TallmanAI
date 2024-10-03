@@ -23,7 +23,7 @@ from qa_module import (
     close_chroma_client,
     reload_database,
 )
-from Prompts.prompts import prompt_dict
+#from Prompts.prompts import prompt_dict
 
 # ============================
 # Load Environment Variables
