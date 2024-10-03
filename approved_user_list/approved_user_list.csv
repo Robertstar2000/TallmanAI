@@ -3,5 +3,5 @@ id,username,pin,email,role
 2,Charile,$2b$12$Ejn3WCqjopfNX3auUhaa9.kjM4leLWRjZeKCgXjoXymDkCv4N/InO,CharlieV@tallmanequipment.com,user
 3,Rick,$2b$12$Ejn3WCqjopfNX3auUhaa9.kjM4leLWRjZeKCgXjoXymDkCv4N/InO,rickl@tallmanequipment.com,admin
 4,Miguel,$2b$12$Ejn3WCqjopfNX3auUhaa9.kjM4leLWRjZeKCgXjoXymDkCv4N/InO,miguelj@tallmanequipment.com,user
-None,John,$2b$12$5i0HMVkYzSOzoObl8PuB9u6WLGhpUMAn6Sdifg7jPE.RkiRAvOe9O,alsdfd@die.com,hold
-5,Joe,$2b$12$yJwqarFtUKvskLgG0oObyO5Reb/hahJcmvUNE9RCOkQkM3wE4tTYC,fskwi@diod.com,new
+
+
