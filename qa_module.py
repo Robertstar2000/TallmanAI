@@ -12,14 +12,11 @@ import datetime
 from dotenv import load_dotenv
 import tiktoken
 
-import streamlit as st
-GROQ_API_KEY = st.secrets["groq"]["api_key"]
-
 # ============================
 # Load Environment Variables
 # ============================
-load_dotenv()
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+import streamlit as st
+GROQ_API_KEY = st.secrets["groq"]["api_key"]
 
 # ============================
 # Initialize ChromaDB Client with Persistence
