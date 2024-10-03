@@ -90,7 +90,7 @@ def handle_login(username, pin):
             st.session_state.user_role = auth_result["role"]
             st.session_state.screen = "qa"
             st.success("Login successful!")
-            st.rerun()
+            # Removed st.rerun()
         else:
             st.error(auth_result["message"])
 
@@ -105,14 +105,15 @@ def display_login_screen():
     with col1:
         if st.button("LOG IN", key="login_button"):
             handle_login(username, pin)
+            # Removed st.rerun()
     with col2:
         if st.button("New Account", key="new_account_button"):
             st.session_state.screen = "new_account"
-            st.rerun()
+            # Removed st.rerun()
     with col3:
         if st.button("Reset Password", key="reset_password_button"):
             st.session_state.screen = "reset_password"
-            st.rerun()
+            # Removed st.rerun()
 
 def handle_new_account(username, pin, email):
     if not username or not pin or not email:
@@ -147,7 +148,7 @@ def display_new_account_screen():
     with col2:
         if st.button("Back to Login", key="back_to_login_button"):
             st.session_state.screen = "login"
-            st.rerun()
+            # Removed st.rerun()
 
 def handle_reset_password(username, email, new_pin):
     if not username or not email or not new_pin:
@@ -175,7 +176,7 @@ def display_reset_password_screen():
     with col2:
         if st.button("Back to Login", key="reset_back_to_login_button"):
             st.session_state.screen = "login"
-            st.rerun()
+            # Removed st.rerun()
 
 # ============================
 # QA Screen
@@ -207,7 +208,7 @@ def display_qa_screen(collection, handle_answer):
         handle_answer(user_question, query_type, collection)
         # Update the user_question in session state
         st.session_state.user_question = user_question
-        st.rerun()  # Rerun to display the updated answer
+        # Removed st.rerun()  # Rerun to display the updated answer
 
     # Display the last response if available
     if "last_response" in st.session_state:
@@ -227,17 +228,17 @@ def display_qa_screen(collection, handle_answer):
     with col1:
         if st.button("Correct Answer", key="qa_correct_answer_button"):
             st.session_state.screen = "correct"
-            st.rerun()
+            # Removed st.rerun()
     with col2:
         if st.button("LOG OUT", key="qa_logout_button"):
             st.session_state.user = None
             st.session_state.screen = "login"
-            st.rerun()
+            # Removed st.rerun()
     with col3:
         if st.session_state.get("user_role") == "admin":
             if st.button("User Management", key="qa_user_management_button"):
                 st.session_state.screen = "user_management"
-                st.rerun()
+                # Removed st.rerun()
 
 # ============================
 # Correct Answer Screen
@@ -281,7 +282,7 @@ def handle_correction(correction, collection):
 
         # Return to QA screen
         st.session_state.screen = "qa"
-        st.rerun()
+        # Removed st.rerun()
 
 def display_correct_screen(collection):
     st.image("images/tallmanlogo.png", use_column_width=True)
@@ -305,7 +306,7 @@ def display_correct_screen(collection):
     with col2:
         if st.button("Done", key="done_button"):
             st.session_state.screen = "qa"
-            st.rerun()
+            # Removed st.rerun()
 
 # ============================
 # User Management Screen
@@ -363,7 +364,7 @@ def display_user_management_screen():
     with col2:
         if st.button("Back to QA", key="back_to_qa_button"):
             st.session_state.screen = "qa"
-            st.rerun()
+            # Removed st.rerun()
 
     # Add the "ReLoad DB" button
     st.write("---")
@@ -377,7 +378,7 @@ def display_user_management_screen():
                 collection, client = reload_database("tallman_knowledge", qa_data_path)
                 st.session_state.chroma_client = client
                 st.success("Database reloaded successfully!")
-                st.rerun()
+                # Removed st.rerun()
             except Exception as e:
                 st.error(f"Failed to reload database: {e}")
 
