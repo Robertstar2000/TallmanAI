@@ -1,4 +1,5 @@
 # user_management.py
+
 import csv
 import os
 import bcrypt
@@ -22,7 +23,7 @@ def load_users() -> Dict[str, Dict]:
     with open(USER_CSV_PATH, mode='r', newline='', encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            username = row['username'].strip()
+            username = row['username'].strip().lower()  # Normalize username
             if username:  # Ensure username is not empty
                 users[username] = {
                     'id': row['id'],
@@ -97,9 +98,11 @@ def add_user(user_data: Dict) -> bool:
     """
     users = load_users()
 
+    username = user_data['username'].strip().lower()
+
     # Check if the username already exists (case-insensitive)
-    if any(username.lower() == user_data['username'].lower() for username in users.keys()):
-        print(f"Add User Failed: Username '{user_data['username']}' already exists.")
+    if username in users:
+        print(f"Add User Failed: Username '{username}' already exists.")
         return False  # Username already exists
 
     # Validate that all required fields are present
@@ -114,7 +117,7 @@ def add_user(user_data: Dict) -> bool:
     # Prepare the new user data
     new_user = {
         "id": str(user_data['id']),
-        "username": user_data['username'].strip(),
+        "username": username,
         "pin": hashed_pin,
         "email": user_data['email'].strip(),
         "role": user_data['role'].strip()
@@ -124,7 +127,7 @@ def add_user(user_data: Dict) -> bool:
     users_list = list(users.values())
     users_list.append(new_user)
     save_users(users_list)
-    print(f"User '{user_data['username']}' added successfully.")
+    print(f"User '{username}' added successfully.")
     return True
 
 def reset_password(username: str, new_pin: str) -> bool:
@@ -139,10 +142,11 @@ def reset_password(username: str, new_pin: str) -> bool:
         bool: True if the password was reset successfully, False otherwise.
     """
     users = load_users()
+    username = username.strip().lower()
     user_found = False
 
     for user in users.values():
-        if user['username'].lower() == username.lower():
+        if user['username'] == username:
             user['pin'] = hash_pin(new_pin)
             user_found = True
             break
