@@ -2,5 +2,6 @@ id,username,pin,email,role
 1,Bob,$2b$12$PaSRdNWkF5OvpcHlt5SUhunnqXNGocAVX1DFP1MdFxxWwBGoQtuWq,mifecoinc@gmail.com,admin
 2,Rick,$2b$12$Ejn3WCqjopfNX3auUhaa9.kjM4leLWRjZeKCgXjoXymDkCv4N/InO,rickl@tallmanequipment.com,admin
 3,Miguel,$2b$12$Ejn3WCqjopfNX3auUhaa9.kjM4leLWRjZeKCgXjoXymDkCv4N/InO,miguelj@tallmanequipment.com,user
-3,Charlie,$2,miguelj@tallmanequipment.com,user
+Charlie's hashed PIN: $2b$12$uTjfXHjZGOGXo9U6wNoA3uS6C2Vf3nsyb7clPdW6v.8kxHZ5SU6W6
+
 
