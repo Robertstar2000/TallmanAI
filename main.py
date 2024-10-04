@@ -15,6 +15,8 @@ from qa_module import (
     close_chroma_client,
     reload_database,
 )
+# Import sys for encoding settings if needed
+import sys
 
 # ============================
 # Load Environment Variables
@@ -47,6 +49,7 @@ load_custom_css()
 # ============================
 def authenticate_user(username, pin):
     users = load_users()
+    username = username.strip().lower()  # Normalize input username
     if username in users:
         user = users[username]
         if verify_pin(pin, user["pin"]):
@@ -115,6 +118,7 @@ def handle_new_account(username, pin, email):
         st.error("Please fill out all fields.")
     else:
         users = load_users()
+        username = username.strip().lower()
         if username in users:
             st.error("Username already exists.")
         else:
@@ -122,7 +126,7 @@ def handle_new_account(username, pin, email):
                 'id': str(len(users) + 1),  # generate a new id
                 'username': username,
                 'pin': pin,
-                'email': email,
+                'email': email.strip(),
                 'role': 'new'
             }
             add_user(user_data)
@@ -161,7 +165,8 @@ def handle_reset_password(username, email, new_pin):
         st.error("Please fill out all fields.")
     else:
         users = load_users()
-        if username in users and users[username]["email"] == email:
+        username = username.strip().lower()
+        if username in users and users[username]["email"] == email.strip():
             reset_password(username, new_pin)
             st.success("Password reset successfully!")
         else:
@@ -323,7 +328,7 @@ def display_correct_screen(collection):
 # ============================
 def save_user_changes(edited_df, users):
     for idx, row in edited_df.iterrows():
-        username = row["username"]
+        username = row["username"].strip().lower()
         if username in users:
             users[username]["role"] = row["role"]
     try:
