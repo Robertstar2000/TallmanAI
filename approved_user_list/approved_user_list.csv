@@ -1,7 +1,6 @@
 id,username,pin,email,role
 1,Bob,$2b$12$PaSRdNWkF5OvpcHlt5SUhunnqXNGocAVX1DFP1MdFxxWwBGoQtuWq,mifecoinc@gmail.com,admin
-2,Charile,$2b$12$Ejn3WCqjopfNX3auUhaa9.kjM4leLWRjZeKCgXjoXymDkCv4N/InO,CharlieV@tallmanequipment.com,user
-3,Rick,$2b$12$Ejn3WCqjopfNX3auUhaa9.kjM4leLWRjZeKCgXjoXymDkCv4N/InO,rickl@tallmanequipment.com,admin
-4,Miguel,$2b$12$Ejn3WCqjopfNX3auUhaa9.kjM4leLWRjZeKCgXjoXymDkCv4N/InO,miguelj@tallmanequipment.com,user
+2,Rick,$2b$12$Ejn3WCqjopfNX3auUhaa9.kjM4leLWRjZeKCgXjoXymDkCv4N/InO,rickl@tallmanequipment.com,admin
+3,Miguel,$2b$12$Ejn3WCqjopfNX3auUhaa9.kjM4leLWRjZeKCgXjoXymDkCv4N/InO,miguelj@tallmanequipment.com,user
 
 
