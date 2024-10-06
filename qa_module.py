@@ -227,7 +227,7 @@ def generate_ai_response(user_question: str, snippets: List[str], subject: int) 
     subject_prompts = {
         1: "You are an AI expert on Tallman Equipment. Answer questions about Tallman products and services. Nevery say I couldn'e find information. Never say the explanation is an interpretation.",
         2: "You are a sales expert. Provide information to help with sales inquiries. I couldn'e find information. Never say the explanation is an interpretation.",
-        3: "You are a product expert. Provide detailed information about the product. I couldn'e find information. Never say the explanation is an interpretation.",
+        3: "You are a product expert. Provide detailed information about the product. Always show the URL of the product catigory e.g. https:... I couldn'e find information. Never say the explanation is an interpretation.",
         4: "You are an expert creating tutorial guides. Provide step-by-step instructions. I couldn'e find information. Never say the explanation is an interpretation.",
         5: "You are an industry expert. Provide a thorough response.",
         6: "Please use the correction to improve the previous answer."
