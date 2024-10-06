@@ -235,7 +235,7 @@ def generate_ai_response(user_question: str, snippets: List[str], subject: int) 
 
     # Calculate token counts
     max_total_tokens = 8192  # Adjust based on the model's actual limit
-    max_response_tokens = 1000  # Reserve tokens for the response
+    max_response_tokens = 1500  # Reserve tokens for the response
 
     # Token counts for prompts
     system_prompt_tokens = len(encoding.encode(system_prompt))
