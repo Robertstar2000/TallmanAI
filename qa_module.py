@@ -159,14 +159,14 @@ def reload_database(collection_name, qa_data_path, persist_directory="chroma_db"
 # ============================
 # Query ChromaDB with Focused Search
 # ============================
-def query_chroma(query_text: str, collection, n_results=3) -> List[str]:
+def query_chroma(query_text: str, collection, n_results=10) -> List[str]:
     """
     Queries the ChromaDB collection with a search prompt.
 
     Args:
         query_text (str): The user's question.
         collection: The ChromaDB collection instance.
-        n_results (int): The number of results to retrieve initially.
+        n_results (int): The number of results to retrieve.
 
     Returns:
         List[str]: A list of relevant snippets.
@@ -177,23 +177,35 @@ def query_chroma(query_text: str, collection, n_results=3) -> List[str]:
         # Query ChromaDB using the user's question
         results = collection.query(
             query_texts=[query_text],
-            n_results=n_results
+            n_results=n_results,
+            include=['documents', 'distances']  # Include distances/scores
         )
         
         if not results or not results['documents']:
             print("No documents found in the query results.")
             return []
         
-        # Flatten the list of documents
-        snippets = [doc for doc_list in results['documents'] for doc in doc_list]
+        # Extract documents and distances
+        documents = results['documents'][0]  # Assuming single query_text
+        distances = results['distances'][0]
 
-        # Limit each snippet to 500 characters
-        truncated_snippets = [snippet[:500] for snippet in snippets]
+        # Pair documents with their distances
+        doc_distance_pairs = list(zip(documents, distances))
+        
+        # Sort documents by increasing distance (assuming lower distance = higher relevance)
+        doc_distance_pairs.sort(key=lambda x: x[1])
+
+        # Extract the sorted documents
+        sorted_documents = [doc for doc, _ in doc_distance_pairs]
+
+        # Limit each snippet to 2,000 characters, considering context boundaries
+        truncated_snippets = [snippet[:2000] for snippet in sorted_documents]
 
         return truncated_snippets
 
     except Exception as e:
         print(f"Error querying ChromaDB: {e}")
+        # Optionally, use traceback.print_exc() for full stack trace
         return []
 
 # ============================
