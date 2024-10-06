@@ -274,7 +274,7 @@ def generate_ai_response(user_question: str, snippets: List[str], subject: int) 
 
     try:
         completion = client.chat.completions.create(
-            model="llama-3.2-3b-preview",
+            model="llama-3.2-11b-vision-preview",
             messages=[
                 {
                     "role": "system",
